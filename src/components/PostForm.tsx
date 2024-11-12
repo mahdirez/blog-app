@@ -35,14 +35,14 @@ function PostForm({ onSubmit }: PostFormProps) {
               <CreatableSelect
                 placeholder="انتخاب"
                 isMulti
-                value={handleTag.map((item) => {
+                value={selectedTag.map((item) => {
                   return {
                     label: item.lable,
                     id: item.id,
                   };
                 })}
                 onChange={(items) => {
-                  setHandleTag(
+                  setSelectedTag(
                     items.map((item) => {
                       return { lable: item.label, id: item.id };
                     })
