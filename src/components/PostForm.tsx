@@ -11,6 +11,7 @@ function PostForm({ onSubmit }: PostFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     onSubmit({

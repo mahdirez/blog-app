@@ -19,7 +19,9 @@ export type Tag = {
 function App() {
   return (
     <Container>
-      <Routes>{/* <Route path="/postform" element={<PostForm />} /> */}</Routes>
+      <Routes>
+        <Route path="/postform" element={<PostForm />} />
+      </Routes>
     </Container>
   );
 }
