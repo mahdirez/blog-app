@@ -10,7 +10,9 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider dir="rtl">
       <BrowserRouter>
-        <App />
+        <div className="bg-secondary vh-100">
+          <App />
+        </div>
       </BrowserRouter>
     </ThemeProvider>
   </StrictMode>
