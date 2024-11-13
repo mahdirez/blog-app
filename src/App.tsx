@@ -1,10 +1,17 @@
 import { Container } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
 import PostForm from "./components/PostForm";
+import { useLocalStorage } from "./hooks/useLocalStorages";
 
-export type Post = {
+export type RawPost = {
   id: string;
-} & PostData;
+} & RawPostData;
+
+export type RawPostData = {
+  title: string;
+  markdown: string;
+  tagIds: string[];
+};
 
 export type PostData = {
   title: string;
@@ -17,6 +24,9 @@ export type Tag = {
   lable: string;
 };
 function App() {
+  const [posts, setPosts] = useLocalStorage<RawPost[]>("POSTS", []);
+  const [tags, setTags] = useLocalStorage<Tag[]>("Tags", []);
+
   return (
     <Container>
       <Routes>
