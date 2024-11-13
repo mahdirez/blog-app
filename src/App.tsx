@@ -3,6 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import PostForm from "./components/PostForm";
 import { useLocalStorage } from "./hooks/useLocalStorages";
 import { useMemo } from "react";
+import { v4 as uuidV4 } from "uuid";
+import AddPost from "./components/AddPost";
 
 export type RawPost = {
   id: string;
@@ -28,7 +30,7 @@ function App() {
   const [posts, setPosts] = useLocalStorage<RawPost[]>("POSTS", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("Tags", []);
 
-  useMemo(() => {
+  const postsWithTag = useMemo(() => {
     posts.map((item) => {
       return {
         ...item,
@@ -36,10 +38,25 @@ function App() {
       };
     });
   }, [posts, tags]);
+
+  function onCreatePost({ tags, ...data }: PostData) {
+    setPosts((prevPosts) => {
+      return [
+        ...prevPosts,
+        {
+          ...data,
+          id: uuidV4(),
+          tagIds: tags.map((item) => {
+            return item.id;
+          }),
+        },
+      ];
+    });
+  }
   return (
     <Container>
       <Routes>
-        <Route path="/postform" element={<PostForm />} />
+        <Route path="/add" element={<AddPost onSubmit={onCreatePost} />} />
       </Routes>
     </Container>
   );
