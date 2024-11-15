@@ -10,6 +10,10 @@ export type RawPost = {
   id: string;
 } & RawPostData;
 
+export type Post = {
+  id: string;
+} & PostData;
+
 export type RawPostData = {
   title: string;
   markdown: string;
@@ -31,7 +35,7 @@ function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("Tags", []);
 
   const postsWithTag = useMemo(() => {
-    posts.map(item => {
+    return posts.map(item => {
       return {
         ...item,
         tags: tags.filter(t => item.tagIds.includes(t.id)),
@@ -60,7 +64,10 @@ function App() {
   return (
     <Container>
       <Routes>
-        <Route path="/" element={<PostList availabelTags={tags} />} />
+        <Route
+          path="/"
+          element={<PostList availabelTags={tags} posts={postsWithTag} />}
+        />
         <Route
           path="/add"
           element={
