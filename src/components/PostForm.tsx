@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 import { PostData, Tag } from "../App";
 import { v4 as uuidV4 } from "uuid";
@@ -15,6 +15,8 @@ function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
 
+  const navigate = useNavigate();
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     onSubmit({
@@ -22,6 +24,7 @@ function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
       markdown: titleRef.current!.value,
       tags: selectedTag,
     });
+    navigate("..");
   }
   return (
     <Form onSubmit={handleSubmit}>
