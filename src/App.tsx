@@ -60,7 +60,7 @@ function App() {
   return (
     <Container>
       <Routes>
-        <Route path="/" element={<PostList />} />
+        <Route path="/" element={<PostList availabelTags={tags} />} />
         <Route
           path="/add"
           element={
