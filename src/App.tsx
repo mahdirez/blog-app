@@ -1,10 +1,10 @@
 import { Container } from "react-bootstrap";
 import { Route, Routes } from "react-router-dom";
-import PostForm from "./components/PostForm";
 import { useLocalStorage } from "./hooks/useLocalStorages";
 import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
 import AddPost from "./components/AddPost";
+import PostList from "./components/PostList";
 
 export type RawPost = {
   id: string;
@@ -60,6 +60,7 @@ function App() {
   return (
     <Container>
       <Routes>
+        <Route path="/" element={<PostList />} />
         <Route
           path="/add"
           element={
