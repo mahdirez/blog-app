@@ -3,11 +3,14 @@ import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import CreatableSelect from "react-select/creatable";
 import { PostData, Tag } from "../App";
+import { v4 as uuidV4 } from "uuid";
 
 type PostFormProps = {
   onSubmit: (data: PostData) => void;
+  onAddTag: (tag: Tag) => void;
+  availableTags: Tag[];
 };
-function PostForm({ onSubmit }: PostFormProps) {
+function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
@@ -17,7 +20,7 @@ function PostForm({ onSubmit }: PostFormProps) {
     onSubmit({
       title: titleRef.current!.value,
       markdown: titleRef.current!.value,
-      tags: [],
+      tags: selectedTag,
     });
   }
   return (
@@ -34,18 +37,26 @@ function PostForm({ onSubmit }: PostFormProps) {
             <Form.Group controlId="tag">
               <Form.Label>تگ</Form.Label>
               <CreatableSelect
+                onCreateOption={label => {
+                  const newTag = { id: uuidV4(), label };
+                  onAddTag(newTag);
+                  setSelectedTag(prev => [...prev, newTag]);
+                }}
+                options={availableTags.map(item => {
+                  return { label: item.label, id: item.id };
+                })}
                 placeholder="انتخاب"
                 isMulti
-                value={selectedTag.map((item) => {
+                value={selectedTag.map(item => {
                   return {
-                    label: item.lable,
+                    label: item.label,
                     id: item.id,
                   };
                 })}
-                onChange={(items) => {
+                onChange={items => {
                   setSelectedTag(
-                    items.map((item) => {
-                      return { lable: item.label, id: item.id };
+                    items.map(item => {
+                      return { label: item.label, id: item.id };
                     })
                   );
                 }}

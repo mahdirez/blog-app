@@ -24,39 +24,52 @@ export type PostData = {
 
 export type Tag = {
   id: string;
-  lable: string;
+  label: string;
 };
 function App() {
   const [posts, setPosts] = useLocalStorage<RawPost[]>("POSTS", []);
   const [tags, setTags] = useLocalStorage<Tag[]>("Tags", []);
 
   const postsWithTag = useMemo(() => {
-    posts.map((item) => {
+    posts.map(item => {
       return {
         ...item,
-        tags: tags.filter((t) => item.tagIds.includes(t.id)),
+        tags: tags.filter(t => item.tagIds.includes(t.id)),
       };
     });
   }, [posts, tags]);
 
   function onCreatePost({ tags, ...data }: PostData) {
-    setPosts((prevPosts) => {
+    setPosts(prevPosts => {
       return [
         ...prevPosts,
         {
           ...data,
           id: uuidV4(),
-          tagIds: tags.map((item) => {
+          tagIds: tags.map(item => {
             return item.id;
           }),
         },
       ];
     });
   }
+
+  function addTag(tag: Tag) {
+    setTags(prev => [...prev, tag]);
+  }
   return (
     <Container>
       <Routes>
-        <Route path="/add" element={<AddPost onSubmit={onCreatePost} />} />
+        <Route
+          path="/add"
+          element={
+            <AddPost
+              onSubmit={onCreatePost}
+              onAddTag={addTag}
+              availableTags={tags}
+            />
+          }
+        />
       </Routes>
     </Container>
   );
