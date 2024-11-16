@@ -6,6 +6,7 @@ import { v4 as uuidV4 } from "uuid";
 import AddPost from "./components/AddPost";
 import PostList from "./components/PostList";
 import PostLayout from "./components/PostLayout";
+import Post from "./components/Post";
 
 export type RawPost = {
   id: string;
@@ -79,7 +80,9 @@ function App() {
             />
           }
         />
-        <Route path=":id" element={<PostLayout posts={postsWithTag} />} />
+        <Route path=":id" element={<PostLayout posts={postsWithTag} />}>
+          <Route index element={<Post />} />
+        </Route>
       </Routes>
     </Container>
   );

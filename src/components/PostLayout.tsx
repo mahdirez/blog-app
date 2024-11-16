@@ -1,4 +1,9 @@
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  useOutletContext,
+  useParams,
+} from "react-router-dom";
 import { Post } from "../App";
 
 type PostLayoutProps = {
@@ -15,4 +20,7 @@ function PostLayout({ posts }: PostLayoutProps) {
   return <Outlet context={post} />;
 }
 
+export function usePost() {
+  return useOutletContext<Post>();
+}
 export default PostLayout;
