@@ -9,8 +9,15 @@ type PostFormProps = {
   onSubmit: (data: PostData) => void;
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
-};
-function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
+} & Partial<PostData>;
+function PostForm({
+  onSubmit,
+  onAddTag,
+  availableTags,
+  title = "",
+  markdown = "",
+  tags = [],
+}: PostFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
   const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
@@ -33,32 +40,32 @@ function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
           <Col>
             <Form.Group controlId="title">
               <Form.Label>عنوان</Form.Label>
-              <Form.Control required ref={titleRef} />
+              <Form.Control required ref={titleRef} defaultValue={title} />
             </Form.Group>
           </Col>
           <Col>
             <Form.Group controlId="tag">
               <Form.Label>تگ</Form.Label>
               <CreatableSelect
-                onCreateOption={label => {
+                onCreateOption={(label) => {
                   const newTag = { id: uuidV4(), label };
                   onAddTag(newTag);
-                  setSelectedTag(prev => [...prev, newTag]);
+                  setSelectedTag((prev) => [...prev, newTag]);
                 }}
-                options={availableTags.map(item => {
+                options={availableTags.map((item) => {
                   return { label: item.label, id: item.id };
                 })}
                 placeholder="انتخاب"
                 isMulti
-                value={selectedTag.map(item => {
+                value={selectedTag.map((item) => {
                   return {
                     label: item.label,
                     id: item.id,
                   };
                 })}
-                onChange={items => {
+                onChange={(items) => {
                   setSelectedTag(
-                    items.map(item => {
+                    items.map((item) => {
                       return { label: item.label, id: item.id };
                     })
                   );
@@ -75,6 +82,7 @@ function PostForm({ onSubmit, onAddTag, availableTags }: PostFormProps) {
               as={"textarea"}
               rows={15}
               ref={markdownRef}
+              defaultValue={markdown}
             />
           </Form.Group>
           <Stack

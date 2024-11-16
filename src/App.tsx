@@ -7,6 +7,7 @@ import AddPost from "./components/AddPost";
 import PostList from "./components/PostList";
 import PostLayout from "./components/PostLayout";
 import Post from "./components/Post";
+import EditPost from "./components/EditPost";
 
 export type RawPost = {
   id: string;
@@ -60,6 +61,17 @@ function App() {
     });
   }
 
+  function onUpdatePost(id: string, { tags, ...data }: PostData) {
+    setPosts((prevNotes) => {
+      return prevNotes.map((item) => {
+        if (item.id === id) {
+          return { ...item, ...data, tagIds: tags.map((tag) => tag.id) };
+        } else {
+          return item;
+        }
+      });
+    });
+  }
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -82,6 +94,16 @@ function App() {
         />
         <Route path=":id" element={<PostLayout posts={postsWithTag} />}>
           <Route index element={<Post />} />
+          <Route
+            path="edit"
+            element={
+              <EditPost
+                onSubmit={onUpdatePost}
+                onAddTag={addTag}
+                availableTags={tags}
+              />
+            }
+          />
         </Route>
       </Routes>
     </Container>
