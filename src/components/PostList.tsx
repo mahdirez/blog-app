@@ -1,4 +1,13 @@
-import { Badge, Button, Card, Col, Form, Row, Stack } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Form,
+  Modal,
+  Row,
+  Stack,
+} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Post, Tag } from "../App";
 import { useMemo, useState } from "react";
@@ -8,21 +17,31 @@ type PostCardProps = {
   title: string;
   id: string;
 };
+
 type PostListProps = {
   availabelTags: Tag[];
   posts: PostCardProps[];
 };
+
+type EditTagsModal = {
+  show: boolean;
+  availabelTags: Tag[];
+  handleClose: () => void;
+};
+
 function PostList({ availabelTags, posts }: PostListProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
+  const [editTagsModalIsOpen, setEditTagsModalIsOpen] = useState(false);
+
   const filteredPosts = useMemo(() => {
-    return posts.filter(i => {
+    return posts.filter((i) => {
       return (
         (title === "" ||
           i.title.toLocaleLowerCase().includes(title.toLocaleLowerCase())) &&
         (selectedTags.length === 0 ||
-          selectedTags.every(tag =>
-            i.tags.some(postTag => postTag.id === tag.id)
+          selectedTags.every((tag) =>
+            i.tags.some((postTag) => postTag.id === tag.id)
           ))
       );
     });
@@ -38,7 +57,12 @@ function PostList({ availabelTags, posts }: PostListProps) {
             <Link to={"/add"}>
               <Button variant="light">افزودن پست</Button>
             </Link>
-            <Button variant="outline-light ">ویرایش تگ ها</Button>
+            <Button
+              variant="outline-light "
+              onClick={() => setEditTagsModalIsOpen(true)}
+            >
+              ویرایش تگ ها
+            </Button>
           </Stack>
         </Col>
       </Row>
@@ -50,14 +74,14 @@ function PostList({ availabelTags, posts }: PostListProps) {
               <Form.Control
                 type="text"
                 value={title}
-                onChange={e => setTitle(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
               />
             </Form.Group>
           </Col>
         </Row>
       </Form>
       <Row>
-        {filteredPosts.map(item => {
+        {filteredPosts.map((item) => {
           return (
             <Col key={item.id}>
               <PostCard id={item.id} title={item.title} tags={item.tags} />
@@ -65,6 +89,11 @@ function PostList({ availabelTags, posts }: PostListProps) {
           );
         })}
       </Row>
+      <EditTagsModal
+        show={editTagsModalIsOpen}
+        availabelTags={availabelTags}
+        handleClose={() => setEditTagsModalIsOpen(false)}
+      />
     </>
   );
 }
@@ -87,7 +116,7 @@ function PostCard({ id, title, tags }: PostCardProps) {
               className="justify-content-center flex-wrap"
               direction="horizontal"
             >
-              {tags.map(tag => (
+              {tags.map((tag) => (
                 <Badge className="text-reuncate" key={tag.id}>
                   {tag.label}
                 </Badge>
@@ -97,6 +126,32 @@ function PostCard({ id, title, tags }: PostCardProps) {
         </Stack>
       </Card.Body>
     </Card>
+  );
+}
+
+function EditTagsModal({ availabelTags, show, handleClose }: EditTagsModal) {
+  return (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>ویرایش تگ ها</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Stack gap={2}>
+            {availabelTags.map((tag) => (
+              <Row key={tag.id}>
+                <Col>
+                  <Form.Control type="text" value={tag.label} />
+                </Col>
+                <Col xs="auto">
+                  <Button variant="outline-none">&times;</Button>
+                </Col>
+              </Row>
+            ))}
+          </Stack>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 }
 export default PostList;
