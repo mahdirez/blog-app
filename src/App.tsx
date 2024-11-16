@@ -79,7 +79,7 @@ function App() {
             />
           }
         />
-        <Route path=":id" element={<PostLayout />} />
+        <Route path=":id" element={<PostLayout posts={postsWithTag} />} />
       </Routes>
     </Container>
   );
