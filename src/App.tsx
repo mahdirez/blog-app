@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { v4 as uuidV4 } from "uuid";
 import AddPost from "./components/AddPost";
 import PostList from "./components/PostList";
+import PostLayout from "./components/PostLayout";
 
 export type RawPost = {
   id: string;
@@ -35,22 +36,22 @@ function App() {
   const [tags, setTags] = useLocalStorage<Tag[]>("Tags", []);
 
   const postsWithTag = useMemo(() => {
-    return posts.map(item => {
+    return posts.map((item) => {
       return {
         ...item,
-        tags: tags.filter(t => item.tagIds.includes(t.id)),
+        tags: tags.filter((t) => item.tagIds.includes(t.id)),
       };
     });
   }, [posts, tags]);
 
   function onCreatePost({ tags, ...data }: PostData) {
-    setPosts(prevPosts => {
+    setPosts((prevPosts) => {
       return [
         ...prevPosts,
         {
           ...data,
           id: uuidV4(),
-          tagIds: tags.map(item => {
+          tagIds: tags.map((item) => {
             return item.id;
           }),
         },
@@ -59,7 +60,7 @@ function App() {
   }
 
   function addTag(tag: Tag) {
-    setTags(prev => [...prev, tag]);
+    setTags((prev) => [...prev, tag]);
   }
   return (
     <Container>
@@ -78,6 +79,7 @@ function App() {
             />
           }
         />
+        <Route path=":id" element={<PostLayout />} />
       </Routes>
     </Container>
   );
