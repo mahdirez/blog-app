@@ -72,6 +72,12 @@ function App() {
       });
     });
   }
+
+  function onDeletePost(id: string) {
+    setPosts((prevPosts) => {
+      return prevPosts.filter((item) => item.id !== id);
+    });
+  }
   function addTag(tag: Tag) {
     setTags((prev) => [...prev, tag]);
   }
@@ -93,7 +99,7 @@ function App() {
           }
         />
         <Route path=":id" element={<PostLayout posts={postsWithTag} />}>
-          <Route index element={<Post />} />
+          <Route index element={<Post deletePost={onDeletePost} />} />
           <Route
             path="edit"
             element={

@@ -1,10 +1,14 @@
 import { Badge, Button, Col, Row, Stack } from "react-bootstrap";
 import { usePost } from "./PostLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
-function Post() {
+type PostProps = {
+  deletePost: (id: string) => void;
+};
+function Post({ deletePost }: PostProps) {
   const post = usePost();
+  const navigate = useNavigate();
   return (
     <>
       <Row className="align-items-center mb-4">
@@ -25,7 +29,15 @@ function Post() {
             <Link to={`/${post.id}/edit`}>
               <Button variant="light">ویرایش</Button>
             </Link>
-            <Button variant="outline-light">حذف</Button>
+            <Button
+              variant="outline-light"
+              onClick={() => {
+                deletePost(post.id);
+                navigate("/");
+              }}
+            >
+              حذف
+            </Button>
             <Link to={"/"}>
               <Button variant="outline">بازگشت</Button>
             </Link>
