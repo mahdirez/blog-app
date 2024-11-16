@@ -1,5 +1,7 @@
-import { Badge, Col, Row, Stack } from "react-bootstrap";
+import { Badge, Button, Col, Row, Stack } from "react-bootstrap";
 import { usePost } from "./PostLayout";
+import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 function Post() {
   const post = usePost();
@@ -18,7 +20,19 @@ function Post() {
             </Stack>
           )}
         </Col>
+        <Col xs="auto">
+          <Stack gap={2} direction="horizontal">
+            <Link to={`/${post.id}/edit`}>
+              <Button variant="light">ویرایش</Button>
+            </Link>
+            <Button variant="outline-light">حذف</Button>
+            <Link to={"/"}>
+              <Button variant="outline">بازگشت</Button>
+            </Link>
+          </Stack>
+        </Col>
       </Row>
+      <ReactMarkdown>{post.markdown}</ReactMarkdown>
     </>
   );
 }
