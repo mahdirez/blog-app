@@ -10,6 +10,7 @@ type PostFormProps = {
   onAddTag: (tag: Tag) => void;
   availableTags: Tag[];
 } & Partial<PostData>;
+
 function PostForm({
   onSubmit,
   onAddTag,
@@ -20,7 +21,7 @@ function PostForm({
 }: PostFormProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const markdownRef = useRef<HTMLTextAreaElement>(null);
-  const [selectedTag, setSelectedTag] = useState<Tag[]>([]);
+  const [selectedTag, setSelectedTag] = useState<Tag[]>(tags);
 
   const navigate = useNavigate();
 
@@ -53,20 +54,20 @@ function PostForm({
                   setSelectedTag((prev) => [...prev, newTag]);
                 }}
                 options={availableTags.map((item) => {
-                  return { label: item.label, id: item.id };
+                  return { label: item.label, value: item.id };
                 })}
                 placeholder="انتخاب"
                 isMulti
                 value={selectedTag.map((item) => {
                   return {
                     label: item.label,
-                    id: item.id,
+                    value: item.id,
                   };
                 })}
                 onChange={(items) => {
                   setSelectedTag(
                     items.map((item) => {
-                      return { label: item.label, id: item.id };
+                      return { label: item.label, id: item.value };
                     })
                   );
                 }}
